@@ -1,6 +1,9 @@
 "use client";
+// TODO: Supabase integration will be added in a dedicated auth/data layer.
+// Keep this page as a client component for cart interactions.
 import Image from "next/image";
 import { Canvas } from "@react-three/fiber";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const categories = [
@@ -29,6 +32,41 @@ export default function Home() {
       description: "Discover the latest trends in modern packaging.",
     },
   ];
+
+  const [cartItems, setCartItems] = useState<any[]>([]);
+  const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("ivelia-cart");
+    if (saved) {
+      setCartItems(JSON.parse(saved));
+    }
+  }, []);
+
+  const addToCart = (product: any) => {
+    const existing = cartItems.find((item) => item.name === product.name);
+
+    let updated;
+
+    if (existing) {
+      updated = cartItems.map((item) =>
+        item.name === product.name
+          ? { ...item, quantity: item.quantity + 1 }
+          : item,
+      );
+    } else {
+      updated = [
+        ...cartItems,
+        {
+          ...product,
+          quantity: 1,
+        },
+      ];
+    }
+
+    setCartItems(updated);
+    localStorage.setItem("ivelia-cart", JSON.stringify(updated));
+  };
 
   const products = [
     {
@@ -69,6 +107,14 @@ export default function Home() {
     },
   ];
 
+  const cartTotal = cartItems
+    .reduce(
+      (sum, item) =>
+        sum + Number(String(item.price).replace("€", "")) * item.quantity,
+      0,
+    )
+    .toFixed(2);
+
   return (
     <main className="min-h-screen bg-white text-neutral-900">
       <header className="sticky top-0 z-10 border-b border-neutral-200 bg-white/90 backdrop-blur">
@@ -83,7 +129,7 @@ export default function Home() {
             <a href="#">Wholesale</a>
             <a href="#">About</a>
             <a href="#">Contact</a>
-            <a href="#">Cart (0)</a>
+            <a href="#">Cart ({cartCount})</a>
           </nav>
         </div>
       </header>
@@ -184,7 +230,7 @@ export default function Home() {
         <div className="mb-10 flex items-center justify-between">
           <h2 className="text-4xl font-light">Featured Collection</h2>
           <div className="rounded-full border border-neutral-200 px-4 py-2 text-sm">
-            Cart (0)
+            Cart ({cartCount}) • €{cartTotal}
           </div>
         </div>
 
@@ -209,7 +255,10 @@ export default function Home() {
 
               <div className="mt-4 flex items-center justify-between">
                 <span className="text-lg font-medium">{product.price}</span>
-                <button className="rounded-full bg-black px-5 py-2 text-sm text-white">
+                <button
+                  onClick={() => addToCart(product)}
+                  className="rounded-full bg-black px-5 py-2 text-sm text-white"
+                >
                   Add to Cart
                 </button>
               </div>
