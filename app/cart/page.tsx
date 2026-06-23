@@ -61,7 +61,7 @@ export default function CartPage() {
   };
 
   return (
-    <main className="min-h-screen bg-white px-6 py-12">
+    <main className="min-h-screen bg-white px-6 py-12 text-neutral-900">
       <div className="mx-auto max-w-6xl">
         <div className="mb-10 flex items-center justify-between">
           <h1 className="text-5xl font-light">Shopping Cart</h1>
@@ -75,7 +75,7 @@ export default function CartPage() {
         </div>
 
         <div className="grid gap-8 lg:grid-cols-[2fr_1fr]">
-          <div className="rounded-3xl border border-neutral-200 p-8">
+          <div className="rounded-3xl border border-neutral-200 bg-white p-8 text-neutral-900">
             <h2 className="mb-6 text-2xl font-medium">Items</h2>
 
             {cartItems.length === 0 ? (
@@ -117,7 +117,7 @@ export default function CartPage() {
                         −
                       </button>
 
-                      <span className="min-w-8 text-center">
+                      <span className="min-w-8 text-center font-medium text-neutral-900">
                         {item.quantity}
                       </span>
 
@@ -134,7 +134,7 @@ export default function CartPage() {
             )}
           </div>
 
-          <div className="rounded-3xl border border-neutral-200 p-8 h-fit">
+          <div className="rounded-3xl border border-neutral-200 bg-white p-8 h-fit text-neutral-900">
             <h2 className="mb-6 text-2xl font-medium">Order Summary</h2>
 
             <div className="space-y-4">
