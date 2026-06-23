@@ -1,6 +1,13 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect } from "react";
 
 export default function SuccessPage() {
+  useEffect(() => {
+    localStorage.removeItem("ivelia-cart");
+    window.dispatchEvent(new Event("storage"));
+  }, []);
   return (
     <main className="min-h-screen bg-white px-6 py-12 flex items-center justify-center">
       <div className="max-w-2xl text-center">
