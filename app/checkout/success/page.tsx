@@ -9,21 +9,23 @@ export default function SuccessPage() {
     window.dispatchEvent(new Event("storage"));
   }, []);
   return (
-    <main className="min-h-screen bg-white px-6 py-12 flex items-center justify-center">
+    <main className="min-h-screen bg-white px-6 py-12 flex items-center justify-center text-neutral-900">
       <div className="max-w-2xl text-center">
         <div className="mb-6 text-6xl">✅</div>
 
-        <h1 className="text-5xl font-light mb-6">Thank You For Your Order</h1>
+        <h1 className="text-5xl font-light mb-6 text-neutral-900">
+          Thank You For Your Order
+        </h1>
 
-        <p className="text-lg text-neutral-600 mb-8">
+        <p className="text-lg text-neutral-800 mb-8">
           Your payment has been successfully received. We will prepare your
           order and contact you if any additional information is required.
         </p>
 
-        <div className="rounded-3xl border border-neutral-200 p-6 mb-8 text-left">
+        <div className="rounded-3xl border border-neutral-200 bg-white p-6 mb-8 text-left text-neutral-900">
           <h2 className="text-xl font-medium mb-4">What happens next?</h2>
 
-          <ul className="space-y-3 text-neutral-600">
+          <ul className="space-y-3 text-neutral-800">
             <li>✓ Payment confirmed</li>
             <li>✓ Order received by IVELIA PACK</li>
             <li>✓ Order preparation and packaging</li>
@@ -38,7 +40,7 @@ export default function SuccessPage() {
 
           <Link
             href="/cart"
-            className="rounded-full border border-neutral-300 px-8 py-3"
+            className="rounded-full border border-neutral-300 px-8 py-3 text-neutral-900"
           >
             View Cart
           </Link>
