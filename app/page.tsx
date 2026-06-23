@@ -2,8 +2,10 @@
 // TODO: Supabase integration will be added in a dedicated auth/data layer.
 // Keep this page as a client component for cart interactions.
 import Image from "next/image";
+import Link from "next/link";
 import { Canvas } from "@react-three/fiber";
 import { useEffect, useState } from "react";
+import { products } from "@/data/products";
 
 export default function Home() {
   const categories = [
@@ -68,45 +70,6 @@ export default function Home() {
     localStorage.setItem("ivelia-cart", JSON.stringify(updated));
   };
 
-  const products = [
-    {
-      name: "Soft Pink Wrap",
-      image: "/images/WXXL-165-Light-Pink.jpg",
-      format: "20cm × 5m Roll",
-      price: "€1.00",
-    },
-    {
-      name: "Luxury Black Collection",
-      image: "/images/MHSKHBXL-171-Black.jpg",
-      format: "40cm × 5m Roll",
-      price: "€1.00",
-    },
-    {
-      name: "Red Signature Wrap",
-      image: "/images/XRRL-012-Red.jpg",
-      format: "60cm × 5m Roll",
-      price: "€1.00",
-    },
-    {
-      name: "Lilac Premium Paper",
-      image: "/images/WXXL-033-Lilac.jpg",
-      format: "80cm × 5m Roll",
-      price: "€1.00",
-    },
-    {
-      name: "Classic Kraft Series",
-      image: "/images/XXLGZ-2.jpg",
-      format: "20 Sheets • 70cm × 70cm",
-      price: "€1.00",
-    },
-    {
-      name: "White Matte Collection",
-      image: "/images/WXXL-5.jpg",
-      format: "20 Sheets • 70cm × 70cm",
-      price: "€1.00",
-    },
-  ];
-
   const cartTotal = cartItems
     .reduce(
       (sum, item) =>
@@ -124,12 +87,12 @@ export default function Home() {
           </div>
 
           <nav className="hidden gap-8 text-sm text-neutral-600 md:flex">
-            <a href="#">Collections</a>
+            <a href="#collections">Collections</a>
             <a href="#">Best Sellers</a>
             <a href="#">Wholesale</a>
             <a href="#">About</a>
             <a href="#">Contact</a>
-            <a href="#">Cart ({cartCount})</a>
+            <Link href="/cart">Cart ({cartCount})</Link>
           </nav>
         </div>
       </header>
@@ -150,9 +113,12 @@ export default function Home() {
           </p>
 
           <div className="mt-10 flex gap-4">
-            <button className="rounded-full bg-black px-8 py-3 text-white">
+            <a
+              href="#featured"
+              className="rounded-full bg-black px-8 py-3 text-white inline-block"
+            >
               Explore Collection
-            </button>
+            </a>
             <button className="rounded-full border border-neutral-300 px-8 py-3">
               Wholesale Orders
             </button>
@@ -201,7 +167,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-20">
+      <section id="collections" className="mx-auto max-w-7xl px-6 py-20">
         <h2 className="mb-10 text-4xl font-light">Collections</h2>
 
         <div className="grid gap-6 md:grid-cols-3">
@@ -226,7 +192,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-20">
+      <section id="featured" className="mx-auto max-w-7xl px-6 py-20">
         <div className="mb-10 flex items-center justify-between">
           <h2 className="text-4xl font-light">Featured Collection</h2>
           <div className="rounded-full border border-neutral-200 px-4 py-2 text-sm">
@@ -236,8 +202,9 @@ export default function Home() {
 
         <div className="grid gap-6 md:grid-cols-3">
           {products.map((product) => (
-            <div
-              key={product.name}
+            <Link
+              href={`/products/${product.slug}`}
+              key={product.slug}
               className="rounded-3xl border border-neutral-200 p-6 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
             >
               <div className="relative mb-5 h-72 overflow-hidden rounded-2xl">
@@ -251,18 +218,23 @@ export default function Home() {
               </div>
 
               <h3 className="text-xl font-medium">{product.name}</h3>
-              <p className="mt-2 text-sm text-neutral-500">{product.format}</p>
+              <p className="mt-2 text-sm text-neutral-500">
+                {product.description}
+              </p>
 
               <div className="mt-4 flex items-center justify-between">
-                <span className="text-lg font-medium">{product.price}</span>
+                <span className="text-lg font-medium">€{product.price}</span>
                 <button
-                  onClick={() => addToCart(product)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    addToCart(product);
+                  }}
                   className="rounded-full bg-black px-5 py-2 text-sm text-white"
                 >
                   Add to Cart
                 </button>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
