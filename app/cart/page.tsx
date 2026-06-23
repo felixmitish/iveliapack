@@ -19,10 +19,24 @@ export default function CartPage() {
     return () => window.removeEventListener("focus", loadCart);
   }, []);
 
-  const updateQuantity = (name: string, change: number) => {
+  const getItemId = (item: any) =>
+    item.cartId || `${item.slug || item.name}-${item.color || "default"}`;
+
+  const updateQuantity = (itemId: string, change: number) => {
+    const targetItem = cartItems.find((item) => getItemId(item) === itemId);
+
+    if (
+      change < 0 &&
+      targetItem &&
+      targetItem.quantity === 1 &&
+      !window.confirm(`Remove ${targetItem.name} from cart?`)
+    ) {
+      return;
+    }
+
     const updated = cartItems
       .map((item) =>
-        item.name === name
+        getItemId(item) === itemId
           ? { ...item, quantity: Math.max(0, item.quantity + change) }
           : item,
       )
@@ -84,7 +98,7 @@ export default function CartPage() {
               <div className="space-y-4">
                 {cartItems.map((item) => (
                   <div
-                    key={`${item.name}-${item.color ?? "default"}`}
+                    key={getItemId(item)}
                     className="flex items-center gap-6 rounded-2xl border border-neutral-200 p-4"
                   >
                     <div className="relative h-32 w-32 overflow-hidden rounded-xl">
@@ -111,7 +125,7 @@ export default function CartPage() {
 
                     <div className="flex items-center gap-3">
                       <button
-                        onClick={() => updateQuantity(item.name, -1)}
+                        onClick={() => updateQuantity(getItemId(item), -1)}
                         className="h-10 w-10 rounded-full border border-neutral-300"
                       >
                         −
@@ -122,7 +136,7 @@ export default function CartPage() {
                       </span>
 
                       <button
-                        onClick={() => updateQuantity(item.name, 1)}
+                        onClick={() => updateQuantity(getItemId(item), 1)}
                         className="h-10 w-10 rounded-full border border-neutral-300"
                       >
                         +
